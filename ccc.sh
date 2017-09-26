@@ -1,10 +1,20 @@
-#!/bin/sh
+#!/bin/bash
 
-rm -rf cscope.*
-rm tags
+function remove_all(){
+    echo "Remove old cscope and ctag files."
+    rm -rf cscope.*
+    rm -rf tags
+}
 
-find `pwd` -name "*.[ch]" > cscope.files
-cscope -bqk -i cscope.files
+function create_all(){
+    echo "Create new cscope and ctag files."
+    find `pwd` -name "*.[ch]" > cscope.files
+    cscope -bqk -i cscope.files
+    ctags -R --exclude=.svn
+}
 
-ctags -R --exclude=.svn
+if [ -e cscope.files ]; then
+    remove_all
+fi
 
+create_all
